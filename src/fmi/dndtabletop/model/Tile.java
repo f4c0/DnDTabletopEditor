@@ -20,9 +20,9 @@ public class Tile  implements Serializable{
 	public static final int DEFAULT_HEIGHT = 40;
 	
 	private JLabel m_view;
-	private int m_id;
+	private long m_id;
 
-	public Tile(int id)
+	public Tile(long id)
 	{
 
 		ImageIcon img = ResourceManager.getInstance().getTextureTile(id).getImage();
@@ -42,7 +42,7 @@ public class Tile  implements Serializable{
 	}
 	
 	
-	public void setTextureTile(int id)
+	public void setTextureTile(long id)
 	{
 		ImageIcon img = ResourceManager.getInstance().getTextureTile(id).getImage();
 		m_view.setIcon(img);

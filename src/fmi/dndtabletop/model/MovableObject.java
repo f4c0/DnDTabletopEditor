@@ -15,12 +15,14 @@ public class MovableObject implements Serializable{
 	private int m_x;
 	private int m_y;
 	private JLabel m_view;
-	private int m_resourceId;
+	private long m_resourceId;
+	private double m_rotate;
 	
-	public MovableObject(int x, int y, int resourceId)
+	public MovableObject(int x, int y, double rotate, long resourceId)
 	{
 		m_x = x;
 		m_y = y;
+		m_rotate = rotate;
 		m_resourceId = resourceId;
 		
 		ImageIcon img = ResourceManager.getInstance().getObject(m_resourceId).getImage();
@@ -43,5 +45,10 @@ public class MovableObject implements Serializable{
 	public int getY()
 	{
 		return m_y;
+	}
+	
+	public double getRotation()
+	{
+		return m_rotate;
 	}
 }

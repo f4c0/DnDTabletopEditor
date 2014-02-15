@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Ressources version="0.3">
+<Ressources version="0.4">
     <CommonEditorResList dir="/fmi/dndtabletop/resources/">
         <CommonEditorRes name="folderIcon" file="icon_spellbook.gif" />
     </CommonEditorResList>
     <TileTexturesList dir="/fmi/dndtabletop/resources/textures/">
-        <TileTexture id="0" name="Void" file="null.jpg" />
-        <TileTexture id="1" name="Boue" file="dirt01.jpg" />
-        <TileTexture id="2" name="Sable" file="Dirt.jpg" />
-        <TileTexture id="3" name="Glace" file="frost.png" />
-        <TileTexture id="4" name="Herbe" file="grass_1024.jpg" />
-        <TileTexture id="5" name="Damier N/B" file="MRAMOR6X6.jpg" />
-        <TileTexture id="6" name="Eau claire" file="Water02.jpg" animated="true"/>
-        <TileTexture id="7" name="Dalle en pierre" file="dalle.png"/>
+        <TileTexture name="Void" file="null.jpg" />
+        <TileTexture name="Boue" file="dirt01.jpg" />
+        <TileTexture name="Sable" file="Dirt.jpg" />
+        <TileTexture name="Glace" file="frost.png" />
+        <TileTexture name="Herbe" file="grass_1024.jpg" />
+        <TileTexture name="Damier N/B" file="MRAMOR6X6.jpg" />
+        <TileTexture name="Eau claire" file="Water02.jpg" animated="true"/>
+        <TileTexture name="Dalle en pierre" file="dalle.png"/>
     </TileTexturesList>
     <ObjectsList dir="/fmi/dndtabletop/resources/objects/">
-        <Object id="8" name="Duke" file="dukeWaveRed.gif" />
+        <Object name="Duke" file="dukeWaveRed.gif" />
+        <Object name="Table de mage" file="wiz-table-big.png" />
     </ObjectsList>
     
 </Ressources>

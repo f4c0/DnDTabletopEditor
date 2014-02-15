@@ -71,7 +71,7 @@ public class MainWindow extends JFrame{
 		//Center pane
 		JComponent cpanel = new JPanel();		
 		cpanel.setLayout(new GridLayout(1,1));	
-		m_battleView = new BattleView(1,1,0);
+		//m_battleView = new BattleView(1,1,0);
 		
 		
 		LayerUI<BattleView> layerUI = new BattlefieldLayerUI();
@@ -80,8 +80,8 @@ public class MainWindow extends JFrame{
 		m_centerSc = new JScrollPane(m_jlayer);
 		m_ColRule = new MetricRule(MetricRule.HORIZONTAL, false, null);
 		m_RowRule = new MetricRule(MetricRule.VERTICAL, false, null);
-		m_ColRule.resize(m_battleView);
-		m_RowRule.resize(m_battleView);
+		//m_ColRule.resize(m_battleView);
+		//m_RowRule.resize(m_battleView);
 		m_centerSc.setColumnHeaderView(m_ColRule);
 		m_centerSc.setRowHeaderView(m_RowRule);
 
@@ -158,7 +158,7 @@ public class MainWindow extends JFrame{
 
 		ResourceManager resMan = ResourceManager.getInstance();
 
-		for (Map.Entry<Integer, TileResource> entry : resMan.getTextureTileMap().entrySet())
+		for (Map.Entry<Long, TileResource> entry : resMan.getTextureTileMap().entrySet())
 		{
 			DefaultMutableTreeNode textNode =  new DefaultMutableTreeNode(entry.getValue());
 			grounds.add(textNode);
@@ -167,7 +167,7 @@ public class MainWindow extends JFrame{
 		//tests !
 		DrawnResource resWall;
 		try{
-		resWall = new DrawnResource(99, "Mur simple", "/fmi/dndtabletop/resources/objects/", "simpleBrickWall.png");
+		resWall = new DrawnResource("Mur simple", "/fmi/dndtabletop/resources/objects/", "free-stone-wall_mini.jpg");
 		walls.add(new DefaultMutableTreeNode(resWall));
 		}catch(IOException e)
 		{
@@ -175,7 +175,7 @@ public class MainWindow extends JFrame{
 		}
 		
 		
-		for (Map.Entry<Integer, MovableResource> entry : resMan.getObjectMap().entrySet())
+		for (Map.Entry<Long, MovableResource> entry : resMan.getObjectMap().entrySet())
 		{
 			DefaultMutableTreeNode textNode =  new DefaultMutableTreeNode(entry.getValue());
 			objects.add(textNode);

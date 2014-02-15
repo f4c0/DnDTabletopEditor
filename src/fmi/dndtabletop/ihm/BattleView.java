@@ -29,7 +29,7 @@ public class BattleView extends JPanel implements MouseListener{
 	
 	private Point m_point;
 
-	public BattleView(int width, int height, int tileId)
+	public BattleView(int width, int height, long tileId)
 	{
 		super();
 		this.m_bf = new Battlefield(width, height, tileId);
@@ -54,10 +54,10 @@ public class BattleView extends JPanel implements MouseListener{
 
 					if(!img.equals(""))
 					{
-						int tempId = Integer.valueOf(img);
+						long tempId = Long.valueOf(img);
 						if(ResourceManager.getInstance().getObjectMap().containsKey(tempId))
 						{
-							MovableObject obj = new MovableObject(dtde.getLocation().x, dtde.getLocation().y, tempId);
+							MovableObject obj = new MovableObject(dtde.getLocation().x, dtde.getLocation().y, Math.toRadians(45), tempId);
 							m_bf.addObject(obj);
 							repaint();
 						}

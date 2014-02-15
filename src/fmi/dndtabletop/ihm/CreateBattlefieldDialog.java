@@ -67,7 +67,7 @@ public class CreateBattlefieldDialog extends JDialog {
 		panTile.setLayout(new GridLayout(1, 1));
 		ResourceManager resMan = ResourceManager.getInstance();
 		Vector<Resource> vResources = new Vector<Resource>();
-		for (Map.Entry<Integer, TileResource> entry : resMan.getTextureTileMap().entrySet())
+		for (Map.Entry<Long, TileResource> entry : resMan.getTextureTileMap().entrySet())
 		{
 			vResources.add(entry.getValue());
 		}

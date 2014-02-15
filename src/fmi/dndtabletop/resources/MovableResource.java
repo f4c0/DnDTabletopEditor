@@ -4,8 +4,8 @@ import java.io.FileNotFoundException;
 
 public class MovableResource extends Resource {
 
-	public MovableResource(int id, String name, String path, String fileName) throws FileNotFoundException
+	public MovableResource(String name, String path, String fileName) throws FileNotFoundException
 	{
-		super(id, name,path, fileName);
+		super(name,path, fileName);
 	}
 }

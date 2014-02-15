@@ -6,8 +6,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
-import java.awt.TexturePaint;
 import java.awt.Toolkit;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.net.URL;
 import java.util.ArrayList;
@@ -43,11 +43,24 @@ public class BattlefieldLayerUI  extends LayerUI<BattleView>{
 
 		//draw objects
 		ArrayList<MovableObject> list = bfv.getObjectsList();
+		AffineTransform tempMatrix = new AffineTransform();
 		for(int i = 0; i < list.size(); i++)
 		{
+			AffineTransform saveXform = g2d.getTransform();
+			
 			MovableObject tempObj = list.get(i);
+			
 			ImageIcon icon = (ImageIcon)tempObj.getView().getIcon();
-			g2d.drawImage(icon.getImage(), tempObj.getX(), tempObj.getY(), c);
+			//tempMatrix.rotate(tempObj.getRotation());
+			//tempMatrix.translate(-icon.getIconWidth()/2, -icon.getIconHeight()/2);
+			
+			//g2d.transform(tempMatrix);
+			g2d.translate(tempObj.getX(), tempObj.getY());
+			//g2d.translate(icon.getIconWidth()/2, icon.getIconHeight()/2);
+			g2d.rotate(tempObj.getRotation());
+			g2d.drawImage(icon.getImage(), 0, -icon.getIconHeight()/2, c);
+			
+			g2d.setTransform(saveXform);
 		}
 
 		ArrayList<Wall> walls = bfv.getWallsList();
@@ -64,14 +77,14 @@ public class BattlefieldLayerUI  extends LayerUI<BattleView>{
 			Graphics2D bGr = bimage.createGraphics();
 			bGr.drawImage(img, 0, 0, null);
 			bGr.dispose();
-
-			TexturePaint paint = new TexturePaint(bimage, new Rectangle(10, 40, 20, 44));
-			g2d.setPaint(paint);
-			//g2d.setColor(Color.gray);
+//
+//			//TexturePaint paint = new TexturePaint(bimage, new Rectangle(10, 40, 20, 44));
+//			//g2d.setPaint(paint);
+//			//g2d.setColor(Color.gray);
 			g2d.setStroke(new BasicStroke(8.0F));
 			for(int i = 0; i < walls.size(); i++)				
 			{
-				System.out.println(walls.get(i));
+				//System.out.println(walls.get(i));
 				g2d.drawLine(walls.get(i).getV1().x, walls.get(i).getV1().y, 
 						walls.get(i).getV2().x,walls.get(i).getV2().y );
 			}		
