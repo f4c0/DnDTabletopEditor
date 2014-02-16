@@ -14,7 +14,7 @@
         <TileTexture name="Dalle en pierre" file="dalle.png"/>
     </TileTexturesList>
     <ObjectsList dir="/fmi/dndtabletop/resources/objects/">
-        <Object name="Duke" file="dukeWaveRed.gif" />
+        <Object name="Porte" file="door.png" />
         <Object name="Table de mage" file="wiz-table-big.png" />
     </ObjectsList>
     

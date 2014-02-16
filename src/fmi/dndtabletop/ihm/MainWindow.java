@@ -2,6 +2,7 @@ package fmi.dndtabletop.ihm;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.awt.Window;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.event.ActionEvent;
@@ -28,6 +29,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTree;
+import javax.swing.SwingUtilities;
 import javax.swing.TransferHandler;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -49,6 +51,10 @@ public class MainWindow extends JFrame{
 	private MetricRule m_ColRule;
 	private MetricRule m_RowRule;
 	private JTree m_tree;
+	
+	public static final String TREE_NODE_NAME_WALL = "Murs";
+	public static final String TREE_NODE_NAME_GND = "Sols";
+	public static final String TREE_NODE_NAME_OBJ = "Objets";			
 
 	private static final String APP_NAME = "DnD Tabletop Editor";
 	private MessageHandler m_network;
@@ -148,9 +154,9 @@ public class MainWindow extends JFrame{
 	{
 		JTree tree;
 		DefaultMutableTreeNode top 		=  new DefaultMutableTreeNode("Palette");
-		DefaultMutableTreeNode grounds 	=  new DefaultMutableTreeNode("Sols");
-		DefaultMutableTreeNode walls 	=  new DefaultMutableTreeNode("Murs");
-		DefaultMutableTreeNode objects 	=  new DefaultMutableTreeNode("Objets");
+		DefaultMutableTreeNode grounds 	=  new DefaultMutableTreeNode(TREE_NODE_NAME_GND);
+		DefaultMutableTreeNode walls 	=  new DefaultMutableTreeNode(TREE_NODE_NAME_WALL);
+		DefaultMutableTreeNode objects 	=  new DefaultMutableTreeNode(TREE_NODE_NAME_OBJ);
 
 		top.add(grounds);
 		top.add(walls);
@@ -221,6 +227,11 @@ public class MainWindow extends JFrame{
 	{
 		return m_tree;
 	}
+	
+	public JLayer<BattleView> getBattleViewUI()
+	{
+		return m_jlayer;
+	}
 
 	public class FileMenuListener implements ActionListener{
 		public void actionPerformed(ActionEvent arg0) {
@@ -228,7 +239,7 @@ public class MainWindow extends JFrame{
 			String sourceText = ((JMenuItem)arg0.getSource()).getText();
 			if(sourceText.equals("Nouveau"))
 			{
-				BattleView bvTemp = new CreateBattlefieldDialog(null, "Nouveau champ de bataille", true).showDialog();
+				BattleView bvTemp = new CreateBattlefieldDialog(null, "Nouveau champ de bataille", true, MainWindow.this).showDialog();
 				if(bvTemp != null)
 				{
 					m_battleView = bvTemp;
@@ -364,7 +375,7 @@ public class MainWindow extends JFrame{
 							JOptionPane.showMessageDialog(null, "Host inconnu!\n"+e.toString(), "UnknownHostException", JOptionPane.ERROR_MESSAGE);
 						}catch(SocketException e)
 						{
-							JOptionPane.showMessageDialog(null, "Impossible de cr�er le socket!\n"+e.toString(), "SocketException", JOptionPane.ERROR_MESSAGE);
+							JOptionPane.showMessageDialog(null, "Impossible de cr\u00E9er le socket!\n"+e.toString(), "SocketException", JOptionPane.ERROR_MESSAGE);
 						}
 						catch(Exception e)
 						{

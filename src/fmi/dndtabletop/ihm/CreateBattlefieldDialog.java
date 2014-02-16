@@ -12,9 +12,11 @@ import javax.swing.JDialog;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JLayer;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
 
 import fmi.dndtabletop.resources.Resource;
@@ -27,9 +29,11 @@ public class CreateBattlefieldDialog extends JDialog {
 	private JFormattedTextField txtWidth;
 	private JFormattedTextField txtHeight;
 	private JList tileList;
+	private MainWindow m_mainWin;
 
-	public CreateBattlefieldDialog(JFrame parent, String title, boolean modal){
+	public CreateBattlefieldDialog(JFrame parent, String title, boolean modal, MainWindow mainWin){
 		super(parent, title, modal);
+		this.m_mainWin = mainWin;
 		this.setSize(320, 210);
 		this.setLocationRelativeTo(null);
 		this.setResizable(false);
@@ -93,8 +97,9 @@ public class CreateBattlefieldDialog extends JDialog {
 		
 		bOk.addActionListener(new ActionListener() {			
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				m_bf = new BattleView(Integer.valueOf(txtWidth.getText()), Integer.valueOf(txtHeight.getText()), ((Resource)tileList.getSelectedValue()).getId());				
+			public void actionPerformed(ActionEvent arg0) {				
+		
+				m_bf = new BattleView(Integer.valueOf(txtWidth.getText()), Integer.valueOf(txtHeight.getText()), ((Resource)tileList.getSelectedValue()).getId(), m_mainWin.getBattleViewUI());				
 				setVisible(false);
 			}
 		});

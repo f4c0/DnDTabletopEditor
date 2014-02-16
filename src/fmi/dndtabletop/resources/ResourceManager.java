@@ -59,7 +59,7 @@ public class ResourceManager {
 					{
 						if(animatedFlag.equals("true"))
 						{
-							name = name + " (animé)";
+							name = name + " (anim\u00E9)";
 						}
 					}
 
@@ -86,7 +86,7 @@ public class ResourceManager {
 					{
 						if(animatedFlag.equals("true"))
 						{
-							name = name + " (animé)";
+							name = name + " (anim\u00E9)";
 						}
 					}
 

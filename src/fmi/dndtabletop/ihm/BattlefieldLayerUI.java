@@ -44,21 +44,22 @@ public class BattlefieldLayerUI  extends LayerUI<BattleView>{
 		//draw objects
 		ArrayList<MovableObject> list = bfv.getObjectsList();
 		AffineTransform tempMatrix = new AffineTransform();
-		for(int i = 0; i < list.size(); i++)
+		for(MovableObject obj : list)
 		{
 			AffineTransform saveXform = g2d.getTransform();
 			
-			MovableObject tempObj = list.get(i);
-			
-			ImageIcon icon = (ImageIcon)tempObj.getView().getIcon();
+			ImageIcon icon = (ImageIcon)obj.getView().getIcon();
 			//tempMatrix.rotate(tempObj.getRotation());
 			//tempMatrix.translate(-icon.getIconWidth()/2, -icon.getIconHeight()/2);
 			
 			//g2d.transform(tempMatrix);
-			g2d.translate(tempObj.getX(), tempObj.getY());
+			g2d.translate(obj.getX(), obj.getY());
 			//g2d.translate(icon.getIconWidth()/2, icon.getIconHeight()/2);
-			g2d.rotate(tempObj.getRotation());
-			g2d.drawImage(icon.getImage(), 0, -icon.getIconHeight()/2, c);
+			g2d.rotate(obj.getRotation());
+			g2d.drawImage(icon.getImage(), 0, 0, c);
+			
+			g2d.setColor(Color.red);
+			g2d.drawRect(0, 0, icon.getIconWidth(), icon.getIconHeight());
 			
 			g2d.setTransform(saveXform);
 		}
