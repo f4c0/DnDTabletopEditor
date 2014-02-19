@@ -77,4 +77,16 @@ public class Battlefield implements Serializable{
 		return m_walls;
 	}
 	
+	public void rotateSelectedObject(double value)
+	{
+		for(MovableObject obj : m_objectsList)
+		{
+			if(obj.isSelected())
+			{
+				obj.rotate(value);
+			}
+		}
+		
+	}
+	
 }

@@ -16,6 +16,9 @@
     <ObjectsList dir="/fmi/dndtabletop/resources/objects/">
         <Object name="Porte" file="door.png" />
         <Object name="Table de mage" file="wiz-table-big.png" />
-    </ObjectsList>
-    
+        <Object name="Trésor" file="treasure.png" />
+        <Object name="Evocation" file="evocation.png" />
+        <Object name="Brasier" file="brazier.png" />
+        <Object name="Squelette 1" file="bones2.png" />
+    </ObjectsList>    
 </Ressources>

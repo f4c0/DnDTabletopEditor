@@ -17,6 +17,7 @@ import java.net.UnknownHostException;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -86,8 +87,6 @@ public class MainWindow extends JFrame{
 		m_centerSc = new JScrollPane(m_jlayer);
 		m_ColRule = new MetricRule(MetricRule.HORIZONTAL, false, null);
 		m_RowRule = new MetricRule(MetricRule.VERTICAL, false, null);
-		//m_ColRule.resize(m_battleView);
-		//m_RowRule.resize(m_battleView);
 		m_centerSc.setColumnHeaderView(m_ColRule);
 		m_centerSc.setRowHeaderView(m_RowRule);
 
@@ -97,8 +96,18 @@ public class MainWindow extends JFrame{
 		m_centerSc.setVisible(false);
 
 		m_tree = createTree();
+		
+		
+		JPanel leftPan = new JPanel();
+		leftPan.setLayout(new BorderLayout());
+		leftPan.add(m_tree, BorderLayout.CENTER);	
+		
+		JPanel panButs = createOrientationButtonsPan();
+		
+		leftPan.add(panButs, BorderLayout.SOUTH);
+		
 
-		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, m_tree, cpanel);
+		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPan, cpanel);
 		splitPane.setOneTouchExpandable(true);
 		splitPane.setDividerLocation(150);
 
@@ -116,15 +125,11 @@ public class MainWindow extends JFrame{
 		menuItemOuvrir.addActionListener(new FileMenuListener());
 		JMenuItem menuItemEnregistre = new JMenuItem("Enregistrer sous...");
 		menuItemEnregistre.addActionListener(new FileMenuListener());		
-		JMenuItem menuItemExportMesh = new JMenuItem("Exporter mesh");
-		menuItemExportMesh.addActionListener(new FileMenuListener());		
 		JMenuItem menuItemQuitter = new JMenuItem("Quitter");
 		menuItemQuitter.addActionListener(new FileMenuListener());
 		menuFichier.add(menuItemNouveau);
 		menuFichier.add(menuItemOuvrir);
 		menuFichier.add(menuItemEnregistre);
-		menuFichier.addSeparator();
-		menuFichier.add(menuItemExportMesh);
 		menuFichier.addSeparator();
 		menuFichier.add(menuItemQuitter);
 
@@ -221,6 +226,46 @@ public class MainWindow extends JFrame{
 		tree.setCellRenderer(new PaletteTreeCellRenderer());
 
 		return tree;
+	}
+	
+	private JPanel createOrientationButtonsPan()
+	{
+		JPanel panButs = new JPanel();
+		panButs.setLayout(new GridLayout(1, 2));
+		
+		JButton butCW = new JButton("CW");
+		JButton butCCW = new JButton("CCW");
+		
+		butCW.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				if(m_battleView != null)
+				{
+					m_battleView.rotateSelectedObject(45);
+				}
+				
+			}
+		});
+		
+		butCCW.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				if(m_battleView != null)
+				{
+					m_battleView.rotateSelectedObject(-45);
+				}
+				
+			}
+		});
+		
+		panButs.add(butCW);
+		panButs.add(butCCW);
+		
+		return panButs;
 	}
 	
 	public JTree getPaletteTree()

@@ -22,6 +22,7 @@ public class MovableObject implements Serializable{
 	private long m_resourceId;
 	private double m_rotate;
 	private JLayer<BattleView> m_layerUI;
+	private boolean m_selected;
 	
 	public MovableObject(int x, int y, double rotate, long resourceId, JLayer<BattleView> layer)
 	{
@@ -36,6 +37,7 @@ public class MovableObject implements Serializable{
 		m_x -= (img.getIconWidth() / 2);
 		m_y -= (img.getIconHeight() / 2);
 		m_view.setBounds(m_x, m_y, img.getIconWidth(), img.getIconHeight());
+		m_selected = false;
 	}
 	
 	public JLabel getView()
@@ -65,14 +67,14 @@ public class MovableObject implements Serializable{
 	
 	public double getRotation()
 	{
-		return m_rotate;
+		return Math.toRadians(m_rotate);
 	}
 	
 	public boolean IsCursorInBounds(MouseEvent mouseEvt)
 	{
 		Rectangle bounds = m_view.getBounds();		
 		
-		return ((mouseEvt.getX() >= m_x) &&
+		return  ((mouseEvt.getX() >= m_x) &&
 				(mouseEvt.getX() <= (m_x + bounds.width)) &&
 				(mouseEvt.getY() >= m_y) &&
 				(mouseEvt.getY() <= (m_y + bounds.height)));
@@ -84,5 +86,30 @@ public class MovableObject implements Serializable{
 		m_y = mouseEvt.getY() - m_view.getHeight()/2;
 		//m_layerUI.repaint();
 		//System.out.println("["+m_x+" ; "+ m_y + "]");
+	}
+	
+	public void select()
+	{
+		m_selected = true;
+	}
+	
+	public void unselect()
+	{
+		m_selected = false;
+	}
+	
+	public void switchSelection()
+	{
+		m_selected = !m_selected;
+	}
+	
+	public boolean isSelected()
+	{
+		return m_selected;
+	}
+	
+	public void rotate(double value)
+	{
+		m_rotate += value;
 	}
 }

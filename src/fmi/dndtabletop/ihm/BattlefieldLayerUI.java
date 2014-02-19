@@ -58,12 +58,20 @@ public class BattlefieldLayerUI  extends LayerUI<BattleView>{
 			g2d.rotate(obj.getRotation());
 			g2d.drawImage(icon.getImage(), 0, 0, c);
 			
-			g2d.setColor(Color.red);
-			g2d.drawRect(0, 0, icon.getIconWidth(), icon.getIconHeight());
+			if(obj.isSelected())
+			{
+				g2d.setColor(Color.red);
+				g2d.drawRect(0, 0, icon.getIconWidth(), icon.getIconHeight());
+			}else
+			{
+				g2d.setColor(Color.black);
+			}
+			
 			
 			g2d.setTransform(saveXform);
 		}
 
+		g2d.setColor(Color.black);
 		ArrayList<Wall> walls = bfv.getWallsList();
 		if(walls.size() > 0)
 		{

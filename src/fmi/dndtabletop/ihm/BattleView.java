@@ -81,7 +81,7 @@ public class BattleView extends JPanel implements MouseListener, MouseMotionList
 	}
 
 	@Override
-	public void mouseClicked(MouseEvent arg0) {
+	public void mouseClicked(MouseEvent mouseEvt) {
 
 		JTree palette = ((MainWindow)SwingUtilities.getRoot(this)).getPaletteTree();
 		DefaultMutableTreeNode node = (DefaultMutableTreeNode)palette.getLastSelectedPathComponent();			
@@ -89,13 +89,14 @@ public class BattleView extends JPanel implements MouseListener, MouseMotionList
 		if (node != null)
 		{
 			if(node.isLeaf())
-			{				
+			{
+				
 				if(node.getParent().toString().equals(MainWindow.TREE_NODE_NAME_GND))
 				{
 					m_point = null;
 					
-					int cellX = arg0.getX() / this.getComponent(0).getWidth();
-					int cellY = arg0.getY() / this.getComponent(0).getHeight();
+					int cellX = mouseEvt.getX() / this.getComponent(0).getWidth();
+					int cellY = mouseEvt.getY() / this.getComponent(0).getHeight();
 					Tile t = this.m_bf.getTile(cellX, cellY);
 					TileResource obj = (TileResource)node.getUserObject();
 					t.setTextureTile(obj.getId());
@@ -103,16 +104,25 @@ public class BattleView extends JPanel implements MouseListener, MouseMotionList
 				{
 					if(m_point == null)
 					{
-						m_point = new Point(arg0.getX(), arg0.getY());
+						m_point = new Point(mouseEvt.getX(), mouseEvt.getY());
 					}else
 					{
-						this.m_bf.addWall(new Wall(m_point, new Point(arg0.getX(), arg0.getY())));
+						this.m_bf.addWall(new Wall(m_point, new Point(mouseEvt.getX(), mouseEvt.getY())));
 						m_point = null;
 						repaint();
 					}
 				}else if(node.getParent().toString().equals(MainWindow.TREE_NODE_NAME_OBJ))
 				{
-					
+					ArrayList<MovableObject> objList = m_bf.getObjectsList();
+					for(MovableObject obj : objList)
+					{
+						if(obj.IsCursorInBounds(mouseEvt))
+						{							
+							obj.switchSelection();
+							break;
+						}
+					}
+					m_point = null;
 				}else
 				{
 					m_point = null;
@@ -164,8 +174,7 @@ public class BattleView extends JPanel implements MouseListener, MouseMotionList
 					for(MovableObject obj : objList)
 					{
 						if(obj.IsCursorInBounds(mouseEvt))
-						{
-							//System.out.println("POLOOoooo");
+						{							
 							obj.move(mouseEvt);
 							break;
 						}
@@ -228,6 +237,11 @@ public class BattleView extends JPanel implements MouseListener, MouseMotionList
 	public boolean getDrawingMode()
 	{
 		return m_drawingModeActivated;
+	}
+	
+	public void rotateSelectedObject(double value)
+	{
+		m_bf.rotateSelectedObject(value);
 	}
 
 
