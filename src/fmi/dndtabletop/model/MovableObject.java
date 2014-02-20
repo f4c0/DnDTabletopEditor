@@ -112,4 +112,11 @@ public class MovableObject implements Serializable{
 	{
 		m_rotate += value;
 	}
+	
+	public String toString()
+	{
+		StringBuffer xmlFlow = new StringBuffer();
+		xmlFlow.append("<MovableObject x=\""+m_x+"\" y=\""+m_y+"\" id=\""+m_resourceId+"\" />");
+		return xmlFlow.toString();
+	}
 }

@@ -4,6 +4,8 @@ import java.awt.geom.Line2D;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane.MoveAction;
+
 public class Battlefield implements Serializable{
 	
 	private int m_width;
@@ -85,8 +87,39 @@ public class Battlefield implements Serializable{
 			{
 				obj.rotate(value);
 			}
+		}		
+	}
+	
+	public String toString()
+	{
+		StringBuffer xmlFlow = new StringBuffer();
+		
+		xmlFlow.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+		xmlFlow.append("<Battlefield>");		
+		xmlFlow.append("<Tiles width=\""+m_width+"\" height=\""+m_height+"\">");
+		
+		for(int y = 0; y < m_height; y++)
+		{
+			for(int x = 0; x < m_width; x++)
+			{
+				xmlFlow.append(m_tiles[x][y].toString());
+			}
 		}
 		
+		xmlFlow.append("</Tiles>");		
+		for(MovableObject obj : m_objectsList)
+		{
+			xmlFlow.append(obj.toString());
+		}
+		
+		for(Wall wall : m_walls)
+		{
+			xmlFlow.append(wall.toString());
+		}
+		
+		xmlFlow.append("</Battlefield>");
+		
+		return xmlFlow.toString();
 	}
 	
 }

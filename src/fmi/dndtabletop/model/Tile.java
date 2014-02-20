@@ -48,6 +48,11 @@ public class Tile  implements Serializable{
 		m_view.setIcon(img);
 		m_id = id;
 	}
+	
+	public String toString()
+	{
+		return "<Tile id=\""+m_id+"\" />";
+	}
 
 
 }

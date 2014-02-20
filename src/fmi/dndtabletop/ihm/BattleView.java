@@ -39,7 +39,7 @@ public class BattleView extends JPanel implements MouseListener, MouseMotionList
 	{
 		super();
 		this.m_layerUI = layer;
-		this.m_bf = new Battlefield(width, height, tileId);
+		this.m_bf = new Battlefield(width, height, tileId);		
 		this.m_drawingModeActivated = false;
 		this.setLayout(new GridLayout(this.m_bf.getHeight(), this.m_bf.getWidth()));
 		m_point = null;
@@ -242,6 +242,11 @@ public class BattleView extends JPanel implements MouseListener, MouseMotionList
 	public void rotateSelectedObject(double value)
 	{
 		m_bf.rotateSelectedObject(value);
+	}
+	
+	public Battlefield getBattlefieldModel()
+	{
+		return m_bf;
 	}
 
 

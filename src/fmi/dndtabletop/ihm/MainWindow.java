@@ -365,6 +365,8 @@ public class MainWindow extends JFrame{
 
 					System.out.println("You chose to save this file: " +
 							absFileName);
+					
+					System.out.println(m_battleView.getBattlefieldModel());
 
 					try {
 						FileOutputStream fichier = new FileOutputStream(absFileName);
