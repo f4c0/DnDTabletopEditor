@@ -41,20 +41,14 @@ public class BattlefieldLayerUI  extends LayerUI<BattleView>{
 			g2d.drawLine(drawHere.x, i * bfv.getTileHeight(), drawHere.x+ drawHere.width, i * bfv.getTileHeight() );
 		}
 
-		//draw objects
+		//Draw objects
 		ArrayList<MovableObject> list = bfv.getObjectsList();
-		AffineTransform tempMatrix = new AffineTransform();
 		for(MovableObject obj : list)
 		{
 			AffineTransform saveXform = g2d.getTransform();
 			
 			ImageIcon icon = (ImageIcon)obj.getView().getIcon();
-			//tempMatrix.rotate(tempObj.getRotation());
-			//tempMatrix.translate(-icon.getIconWidth()/2, -icon.getIconHeight()/2);
-			
-			//g2d.transform(tempMatrix);
 			g2d.translate(obj.getX(), obj.getY());
-			//g2d.translate(icon.getIconWidth()/2, icon.getIconHeight()/2);
 			g2d.rotate(obj.getRotation());
 			g2d.drawImage(icon.getImage(), 0, 0, c);
 			
@@ -86,14 +80,10 @@ public class BattlefieldLayerUI  extends LayerUI<BattleView>{
 			Graphics2D bGr = bimage.createGraphics();
 			bGr.drawImage(img, 0, 0, null);
 			bGr.dispose();
-//
-//			//TexturePaint paint = new TexturePaint(bimage, new Rectangle(10, 40, 20, 44));
-//			//g2d.setPaint(paint);
-//			//g2d.setColor(Color.gray);
+
 			g2d.setStroke(new BasicStroke(8.0F));
 			for(int i = 0; i < walls.size(); i++)				
 			{
-				//System.out.println(walls.get(i));
 				g2d.drawLine(walls.get(i).getV1().x, walls.get(i).getV1().y, 
 						walls.get(i).getV2().x,walls.get(i).getV2().y );
 			}		

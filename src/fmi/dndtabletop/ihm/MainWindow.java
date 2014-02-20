@@ -387,7 +387,13 @@ public class MainWindow extends JFrame{
 			{
 				if(m_network != null)
 				{
-					m_network.close();
+					try{
+						m_network.close();
+					}catch(IOException e)
+					{
+						e.printStackTrace();
+					}
+					
 				}
 				System.exit(0);
 			}
@@ -435,8 +441,25 @@ public class MainWindow extends JFrame{
 
 				}
 			}else if(sourceText.equals("Push"))
-			{
-
+			{				
+				if(m_network != null)
+				{
+					if(m_battleView != null)
+					{
+						try{
+							m_network.sendRawMessage(m_battleView.getBattlefieldModel().toString());
+						}catch (IOException e)
+						{
+							JOptionPane.showMessageDialog(null, "Erreur d'E/S!\n"+e.toString(), "IOException", JOptionPane.ERROR_MESSAGE);
+						}	
+					}else
+					{
+						JOptionPane.showMessageDialog(null, "Battlefield vide", "Gnnn ??", JOptionPane.ERROR_MESSAGE);
+					}
+				}else
+				{
+					JOptionPane.showMessageDialog(null, "Connecte toi d'abord !", "Erreur de connexion", JOptionPane.ERROR_MESSAGE);
+				}
 			}else if(sourceText.equals("Send raw datagram"))
 			{
 				if(m_network != null)

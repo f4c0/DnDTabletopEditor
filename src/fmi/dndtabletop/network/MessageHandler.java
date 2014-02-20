@@ -1,9 +1,10 @@
 package fmi.dndtabletop.network;
 
 import java.io.IOException;
+import java.io.PrintStream;
 import java.net.DatagramPacket;
-import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
@@ -12,31 +13,37 @@ public class MessageHandler {
 	private String m_host;
 	private int m_port;
 	private InetAddress m_serverIP;
-	private DatagramSocket m_socket;
+	private Socket m_socket;
 	
-	public MessageHandler(String host, int port) throws UnknownHostException, SocketException
+	private PrintStream outputFlow;
+	
+	public MessageHandler(String host, int port) throws UnknownHostException, SocketException, IOException
 	{
 		this.m_host = host;
 		this.m_port = port;
 		this.m_serverIP = InetAddress.getByName(m_host);
-		this.m_socket = new DatagramSocket();
+		this.m_socket = new Socket(m_serverIP, m_port);
+		
+		this.outputFlow = new PrintStream(m_socket.getOutputStream());
 	}	
 	
 	public void sendRawMessage(String message) throws IOException
 	{
-		DatagramPacket dataP = new DatagramPacket(message.getBytes(),message.length(), this.m_serverIP, this.m_port); 
-		this.m_socket.send(dataP);
+		this.outputFlow.print(message);
 	}
 	
-	public void reconfigure(String host, int port) throws UnknownHostException, SocketException
+	public void reconfigure(String host, int port) throws UnknownHostException, SocketException, IOException
 	{
 		this.m_host = host;
 		this.m_port = port;
 		this.m_serverIP = InetAddress.getByName(m_host);
+		this.m_socket = new Socket(m_serverIP, m_port);
+		this.outputFlow = new PrintStream(m_socket.getOutputStream());
 	}
 	
-	public void close()
+	public void close() throws IOException
 	{
+		this.outputFlow.close();
 		this.m_socket.close();	
 	}
 
