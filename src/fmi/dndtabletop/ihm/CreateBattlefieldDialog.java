@@ -12,11 +12,9 @@ import javax.swing.JDialog;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JLayer;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
 
 import fmi.dndtabletop.resources.Resource;

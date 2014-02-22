@@ -5,7 +5,6 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
-import java.io.FileNotFoundException;
 import java.net.URL;
 
 import javax.swing.ImageIcon;

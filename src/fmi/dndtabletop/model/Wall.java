@@ -8,21 +8,19 @@ public class Wall implements Serializable{
 	
 	private ArrayList<Point> m_pointList;
 	
-	public Wall(Point v1,  Point v2)
+	public Wall()
 	{
 		this.m_pointList = new ArrayList<Point>();
-		m_pointList.add(v1);
-		m_pointList.add(v2);
 	}
 	
-	public Point getV1()
+	public void addPoint(Point p)
 	{
-		return m_pointList.get(0);
+		m_pointList.add(p);
 	}
 	
-	public Point getV2()
+	public ArrayList<Point> getPoints()
 	{
-		return m_pointList.get(1);
+		return m_pointList;
 	}
 	
 	public String toString()

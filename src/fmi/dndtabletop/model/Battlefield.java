@@ -1,10 +1,7 @@
 package fmi.dndtabletop.model;
 
-import java.awt.geom.Line2D;
 import java.io.Serializable;
 import java.util.ArrayList;
-
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane.MoveAction;
 
 public class Battlefield implements Serializable{
 	
@@ -13,8 +10,6 @@ public class Battlefield implements Serializable{
 	private Tile m_tiles[][];
 	private ArrayList<MovableObject> m_objectsList;
 	private ArrayList<Wall> m_walls;
-	
-	private static final int DEFAULT_TEXTURE_ID = 0;
 
 	private static final long serialVersionUID = 1L;
 	

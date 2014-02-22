@@ -5,9 +5,11 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Path2D;
 import java.awt.image.BufferedImage;
 import java.net.URL;
 import java.util.ArrayList;
@@ -17,6 +19,7 @@ import javax.swing.JComponent;
 import javax.swing.JLayer;
 import javax.swing.plaf.LayerUI;
 
+import fmi.dndtabletop.ihm.BattleView.DrawingMode;
 import fmi.dndtabletop.model.MovableObject;
 import fmi.dndtabletop.model.Wall;
 
@@ -84,10 +87,38 @@ public class BattlefieldLayerUI  extends LayerUI<BattleView>{
 			g2d.setStroke(new BasicStroke(8.0F));
 			for(int i = 0; i < walls.size(); i++)				
 			{
-				g2d.drawLine(walls.get(i).getV1().x, walls.get(i).getV1().y, 
-						walls.get(i).getV2().x,walls.get(i).getV2().y );
+				Path2D.Float wallShape = new Path2D.Float();
+				ArrayList<Point> points = walls.get(i).getPoints();
+				for(int j = 0; j < points.size(); j++)
+				{
+					if(j == 0)
+					{
+						wallShape.moveTo(points.get(j).x, points.get(j).y);
+					}else
+					{
+						wallShape.lineTo(points.get(j).x, points.get(j).y);
+					}
+				}
+				
+				g2d.draw(wallShape);
+				
+//				g2d.drawLine(walls.get(i).getV1().x, walls.get(i).getV1().y, 
+//						walls.get(i).getV2().x,walls.get(i).getV2().y );
 			}		
-			
+		}
+		
+		if(bfv.getDrawingMode() == DrawingMode.LINE)
+		{
+			g2d.setStroke(new BasicStroke(3.0F));
+			g2d.setColor(Color.blue);
+			g2d.drawLine(bfv.getP1().x, bfv.getP1().y, 
+					bfv.getP2().x, bfv.getP2().y );
+		}else if(bfv.getDrawingMode() == DrawingMode.RECT)
+		{
+			g2d.setStroke(new BasicStroke(3.0F));
+			g2d.setColor(Color.blue);
+			g2d.drawRect(Math.min(bfv.getP1().x, bfv.getP2().x), Math.min(bfv.getP1().y, bfv.getP2().y), 
+					Math.abs(bfv.getP2().x - bfv.getP1().x), Math.abs(bfv.getP2().y - bfv.getP1().y));
 		}
 
 

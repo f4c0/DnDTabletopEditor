@@ -2,7 +2,6 @@ package fmi.dndtabletop.ihm;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
-import java.awt.Window;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.event.ActionEvent;
@@ -30,7 +29,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTree;
-import javax.swing.SwingUtilities;
 import javax.swing.TransferHandler;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -54,6 +52,7 @@ public class MainWindow extends JFrame{
 	private JTree m_tree;
 	
 	public static final String TREE_NODE_NAME_WALL = "Murs";
+	public static final String TREE_NODE_NAME_ROOM = "Salles";
 	public static final String TREE_NODE_NAME_GND = "Sols";
 	public static final String TREE_NODE_NAME_OBJ = "Objets";			
 
@@ -161,10 +160,12 @@ public class MainWindow extends JFrame{
 		DefaultMutableTreeNode top 		=  new DefaultMutableTreeNode("Palette");
 		DefaultMutableTreeNode grounds 	=  new DefaultMutableTreeNode(TREE_NODE_NAME_GND);
 		DefaultMutableTreeNode walls 	=  new DefaultMutableTreeNode(TREE_NODE_NAME_WALL);
+		DefaultMutableTreeNode rooms 	=  new DefaultMutableTreeNode(TREE_NODE_NAME_ROOM);
 		DefaultMutableTreeNode objects 	=  new DefaultMutableTreeNode(TREE_NODE_NAME_OBJ);
 
 		top.add(grounds);
 		top.add(walls);
+		top.add(rooms);
 		top.add(objects);
 
 		ResourceManager resMan = ResourceManager.getInstance();
@@ -179,10 +180,11 @@ public class MainWindow extends JFrame{
 		DrawnResource resWall;
 		try{
 		resWall = new DrawnResource("Mur simple", 0, "/fmi/dndtabletop/resources/objects/", "free-stone-wall_mini.jpg");
+		rooms.add(new DefaultMutableTreeNode(resWall));
 		walls.add(new DefaultMutableTreeNode(resWall));
 		}catch(IOException e)
 		{
-			m_battleView.setDrawingMode(true);
+			e.printStackTrace();
 		}
 		
 		
@@ -496,23 +498,23 @@ public class MainWindow extends JFrame{
 	 * event-dispatching thread.
 	 */
 	private static void createAndShowGUI() {
-		try {
-			// Set System L&F
-			UIManager.setLookAndFeel(
-					UIManager.getSystemLookAndFeelClassName());
-		} 
-		catch (UnsupportedLookAndFeelException e) {
-			// handle exception
-		}
-		catch (ClassNotFoundException e) {
-			// handle exception
-		}
-		catch (InstantiationException e) {
-			// handle exception
-		}
-		catch (IllegalAccessException e) {
-			// handle exception
-		}
+//		try {
+//			// Set System L&F
+//			UIManager.setLookAndFeel(
+//					UIManager.getSystemLookAndFeelClassName());
+//		} 
+//		catch (UnsupportedLookAndFeelException e) {
+//			// handle exception
+//		}
+//		catch (ClassNotFoundException e) {
+//			// handle exception
+//		}
+//		catch (InstantiationException e) {
+//			// handle exception
+//		}
+//		catch (IllegalAccessException e) {
+//			// handle exception
+//		}
 
 		MainWindow mainWin = new MainWindow();
 		mainWin.pack();

@@ -1,15 +1,11 @@
 package fmi.dndtabletop.model;
 
-import java.awt.Color;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.io.Serializable;
-
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JLayer;
-import javax.swing.border.LineBorder;
-import javax.swing.border.TitledBorder;
 
 import fmi.dndtabletop.ihm.BattleView;
 import fmi.dndtabletop.resources.ResourceManager;
@@ -21,16 +17,14 @@ public class MovableObject implements Serializable{
 	private JLabel m_view;
 	private int m_resourceId;
 	private double m_rotate;
-	private JLayer<BattleView> m_layerUI;
 	private boolean m_selected;
 	
-	public MovableObject(int x, int y, double rotate, int resourceId, JLayer<BattleView> layer)
+	public MovableObject(int x, int y, double rotate, int resourceId)
 	{
 		m_x = x;
 		m_y = y;
 		m_rotate = rotate;
 		m_resourceId = resourceId;
-		m_layerUI = layer;
 		
 		ImageIcon img = ResourceManager.getInstance().getObject(m_resourceId).getImage();
 		m_view = new JLabel(img);
@@ -84,8 +78,6 @@ public class MovableObject implements Serializable{
 	{
 		m_x = mouseEvt.getX() - m_view.getWidth()/2;
 		m_y = mouseEvt.getY() - m_view.getHeight()/2;
-		//m_layerUI.repaint();
-		//System.out.println("["+m_x+" ; "+ m_y + "]");
 	}
 	
 	public void select()

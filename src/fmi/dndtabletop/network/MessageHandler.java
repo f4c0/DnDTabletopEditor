@@ -2,7 +2,6 @@ package fmi.dndtabletop.network;
 
 import java.io.IOException;
 import java.io.PrintStream;
-import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketException;

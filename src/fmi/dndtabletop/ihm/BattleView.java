@@ -1,12 +1,13 @@
 package fmi.dndtabletop.ihm;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetDropEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -16,7 +17,6 @@ import javax.swing.JLayer;
 import javax.swing.JPanel;
 import javax.swing.JTree;
 import javax.swing.SwingUtilities;
-import javax.swing.border.LineBorder;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import fmi.dndtabletop.model.Battlefield;
@@ -26,23 +26,32 @@ import fmi.dndtabletop.model.Wall;
 import fmi.dndtabletop.resources.ResourceManager;
 import fmi.dndtabletop.resources.TileResource;
 
-public class BattleView extends JPanel implements MouseListener, MouseMotionListener{
+public class BattleView extends JPanel implements MouseListener, MouseMotionListener, KeyListener{
 
 	private Battlefield m_bf;
-	private boolean m_drawingModeActivated;
+	private DrawingMode m_drawingModeActivated;
 	
-	private Point m_point;
+	private Point m_point1;
+	private Point m_point2;
 	
 	private JLayer<BattleView> m_layerUI;
+	
+	enum DrawingMode
+	{
+		NONE,
+		LINE,
+		RECT
+	};
 
 	public BattleView(int width, int height, int tileId, JLayer<BattleView> layer)
 	{
 		super();
 		this.m_layerUI = layer;
 		this.m_bf = new Battlefield(width, height, tileId);		
-		this.m_drawingModeActivated = false;
+		this.m_drawingModeActivated = DrawingMode.NONE;
 		this.setLayout(new GridLayout(this.m_bf.getHeight(), this.m_bf.getWidth()));
-		m_point = null;
+		m_point1 = null;
+		m_point2 = new Point();
 
 		for(int y = 0; y < this.m_bf.getHeight(); y++)
 		{
@@ -64,7 +73,7 @@ public class BattleView extends JPanel implements MouseListener, MouseMotionList
 						int tempId = Integer.valueOf(img);
 						if(ResourceManager.getInstance().getObjectMap().containsKey(tempId))
 						{
-							MovableObject obj = new MovableObject(dtde.getLocation().x, dtde.getLocation().y, Math.toRadians(0), tempId, m_layerUI);
+							MovableObject obj = new MovableObject(dtde.getLocation().x, dtde.getLocation().y, Math.toRadians(0), tempId);
 							m_bf.addObject(obj);
 							repaint();
 						}
@@ -78,10 +87,13 @@ public class BattleView extends JPanel implements MouseListener, MouseMotionList
 
 		this.addMouseListener(this);
 		this.addMouseMotionListener(this);
+		this.addKeyListener(this);
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent mouseEvt) {
+		
+		requestFocusInWindow();
 
 		JTree palette = ((MainWindow)SwingUtilities.getRoot(this)).getPaletteTree();
 		DefaultMutableTreeNode node = (DefaultMutableTreeNode)palette.getLastSelectedPathComponent();			
@@ -93,7 +105,7 @@ public class BattleView extends JPanel implements MouseListener, MouseMotionList
 				
 				if(node.getParent().toString().equals(MainWindow.TREE_NODE_NAME_GND))
 				{
-					m_point = null;
+					m_point1 = null;
 					
 					int cellX = mouseEvt.getX() / this.getComponent(0).getWidth();
 					int cellY = mouseEvt.getY() / this.getComponent(0).getHeight();
@@ -102,14 +114,42 @@ public class BattleView extends JPanel implements MouseListener, MouseMotionList
 					t.setTextureTile(obj.getId());
 				}else if(node.getParent().toString().equals(MainWindow.TREE_NODE_NAME_WALL))
 				{
-					if(m_point == null)
+					if(m_point1 == null)
 					{
-						m_point = new Point(mouseEvt.getX(), mouseEvt.getY());
+						m_point1 = new Point(mouseEvt.getX(), mouseEvt.getY());
+						m_point2.setLocation(m_point1);
+						m_drawingModeActivated = DrawingMode.LINE;
 					}else
 					{
-						this.m_bf.addWall(new Wall(m_point, new Point(mouseEvt.getX(), mouseEvt.getY())));
-						m_point = null;
-						repaint();
+						Wall w = new Wall();
+						w.addPoint(m_point1);
+						w.addPoint(new Point(mouseEvt.getX(), mouseEvt.getY()));
+						this.m_bf.addWall(w);
+						m_point1 = null;
+						m_drawingModeActivated = DrawingMode.NONE;
+					}
+				}else if(node.getParent().toString().equals(MainWindow.TREE_NODE_NAME_ROOM))
+				{
+					if(m_point1 == null)
+					{
+						m_point1 = new Point(mouseEvt.getX(), mouseEvt.getY());
+						m_point2.setLocation(m_point1);
+						m_drawingModeActivated = DrawingMode.RECT;
+					}else
+					{
+						Wall w = new Wall();
+						w.addPoint(m_point1);
+						w.addPoint(new Point(mouseEvt.getX(), m_point1.y));
+						w.addPoint(new Point(mouseEvt.getX(), mouseEvt.getY()));
+						w.addPoint(new Point(m_point1.x, mouseEvt.getY()));
+						w.addPoint(m_point1);
+						this.m_bf.addWall(w);
+//						this.m_bf.addWall(new Wall(m_point1, new Point(mouseEvt.getX(), m_point1.y)));
+//						this.m_bf.addWall(new Wall(new Point(mouseEvt.getX(), m_point1.y), new Point(mouseEvt.getX(), mouseEvt.getY())));
+//						this.m_bf.addWall(new Wall(new Point(mouseEvt.getX(), mouseEvt.getY()), new Point(m_point1.x, mouseEvt.getY())));
+//						this.m_bf.addWall(new Wall(new Point(m_point1.x, mouseEvt.getY()), m_point1));
+						m_point1 = null;
+						m_drawingModeActivated = DrawingMode.NONE;
 					}
 				}else if(node.getParent().toString().equals(MainWindow.TREE_NODE_NAME_OBJ))
 				{
@@ -122,10 +162,10 @@ public class BattleView extends JPanel implements MouseListener, MouseMotionList
 							break;
 						}
 					}
-					m_point = null;
+					m_point1 = null;
 				}else
 				{
-					m_point = null;
+					m_point1 = null;
 				}
 			}
 
@@ -181,7 +221,7 @@ public class BattleView extends JPanel implements MouseListener, MouseMotionList
 					}
 				}else
 				{
-					m_point = null;
+					m_point1 = null;
 				}
 			}
 
@@ -192,7 +232,11 @@ public class BattleView extends JPanel implements MouseListener, MouseMotionList
 	@Override
 	public void mouseMoved(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		//System.out.println(arg0);
+		if(m_drawingModeActivated != DrawingMode.NONE)
+		{
+			m_point2.setLocation(arg0.getX(), arg0.getY());
+			m_layerUI.repaint();
+		}
 	}
 
 	public ArrayList<MovableObject> getObjectsList()
@@ -229,14 +273,19 @@ public class BattleView extends JPanel implements MouseListener, MouseMotionList
 		return super.getPreferredSize();
 	}
 	
-	public void setDrawingMode(boolean drawingModeActivated)
-	{
-		m_drawingModeActivated = drawingModeActivated;
-	}
-	
-	public boolean getDrawingMode()
+	public DrawingMode getDrawingMode()
 	{
 		return m_drawingModeActivated;
+	}
+	
+	public Point getP1()
+	{
+		return m_point1;
+	}
+	
+	public Point getP2()
+	{
+		return m_point2;
 	}
 	
 	public void rotateSelectedObject(double value)
@@ -247,6 +296,33 @@ public class BattleView extends JPanel implements MouseListener, MouseMotionList
 	public Battlefield getBattlefieldModel()
 	{
 		return m_bf;
+	}
+
+	@Override
+	public void keyPressed(KeyEvent kEvent) {
+		switch(kEvent.getKeyCode())
+		{
+		case KeyEvent.VK_ESCAPE:
+			m_drawingModeActivated = DrawingMode.NONE;
+			m_point1 = null;
+			m_layerUI.repaint();
+			break;
+			default:
+				break;
+		}
+		
+	}
+
+	@Override
+	public void keyReleased(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyTyped(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 
 
