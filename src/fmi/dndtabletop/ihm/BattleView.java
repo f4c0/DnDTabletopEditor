@@ -35,7 +35,7 @@ public class BattleView extends JPanel implements MouseListener, MouseMotionList
 	
 	private JLayer<BattleView> m_layerUI;
 
-	public BattleView(int width, int height, long tileId, JLayer<BattleView> layer)
+	public BattleView(int width, int height, int tileId, JLayer<BattleView> layer)
 	{
 		super();
 		this.m_layerUI = layer;
@@ -61,7 +61,7 @@ public class BattleView extends JPanel implements MouseListener, MouseMotionList
 
 					if(!img.equals(""))
 					{
-						long tempId = Long.valueOf(img);
+						int tempId = Integer.valueOf(img);
 						if(ResourceManager.getInstance().getObjectMap().containsKey(tempId))
 						{
 							MovableObject obj = new MovableObject(dtde.getLocation().x, dtde.getLocation().y, Math.toRadians(0), tempId, m_layerUI);

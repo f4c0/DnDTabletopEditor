@@ -4,21 +4,21 @@
         <CommonEditorRes name="folderIcon" file="icon_spellbook.gif" />
     </CommonEditorResList>
     <TileTexturesList dir="/fmi/dndtabletop/resources/textures/">
-        <TileTexture name="Void" file="null.jpg" />
-        <TileTexture name="Boue" file="dirt01.jpg" />
-        <TileTexture name="Sable" file="Dirt.jpg" />
-        <TileTexture name="Glace" file="frost.png" />
-        <TileTexture name="Herbe" file="grass_1024.jpg" />
-        <TileTexture name="Damier N/B" file="MRAMOR6X6.jpg" />
-        <TileTexture name="Eau claire" file="Water02.jpg" animated="true"/>
-        <TileTexture name="Dalle en pierre" file="dalle.png"/>
+        <TileTexture id="000" name="Void" file="null.jpg" />
+        <TileTexture id="001" name="Boue" file="dirt01.jpg" />
+        <TileTexture id="002" name="Sable" file="Dirt.jpg" />
+        <TileTexture id="003" name="Glace" file="frost.png" />
+        <TileTexture id="004" name="Herbe" file="grass_1024.jpg" />
+        <TileTexture id="005" name="Damier N/B" file="MRAMOR6X6.jpg" />
+        <TileTexture id="006" name="Eau claire" file="Water02.jpg" animated="true"/>
+        <TileTexture id="007" name="Dalle en pierre" file="dalle.png"/>
     </TileTexturesList>
     <ObjectsList dir="/fmi/dndtabletop/resources/objects/">
-        <Object name="Porte" file="door.png" />
-        <Object name="Table de mage" file="wiz-table-big.png" />
-        <Object name="Trésor" file="treasure.png" />
-        <Object name="Evocation" file="evocation.png" />
-        <Object name="Brasier" file="brazier.png" />
-        <Object name="Squelette 1" file="bones2.png" />
+        <Object id="001" name="Porte" file="door.png" />
+        <Object id="002" name="Table de mage" file="wiz-table-big.png" />
+        <Object id="003" name="Trésor" file="treasure.png" />
+        <Object id="004" name="Evocation" file="evocation.png" />
+        <Object id="005" name="Brasier" file="brazier.png" />
+        <Object id="006" name="Squelette 1" file="bones2.png" />
     </ObjectsList>    
 </Ressources>

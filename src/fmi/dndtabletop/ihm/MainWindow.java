@@ -169,7 +169,7 @@ public class MainWindow extends JFrame{
 
 		ResourceManager resMan = ResourceManager.getInstance();
 
-		for (Map.Entry<Long, TileResource> entry : resMan.getTextureTileMap().entrySet())
+		for (Map.Entry<Integer, TileResource> entry : resMan.getTextureTileMap().entrySet())
 		{
 			DefaultMutableTreeNode textNode =  new DefaultMutableTreeNode(entry.getValue());
 			grounds.add(textNode);
@@ -178,7 +178,7 @@ public class MainWindow extends JFrame{
 		//tests !
 		DrawnResource resWall;
 		try{
-		resWall = new DrawnResource("Mur simple", "/fmi/dndtabletop/resources/objects/", "free-stone-wall_mini.jpg");
+		resWall = new DrawnResource("Mur simple", 0, "/fmi/dndtabletop/resources/objects/", "free-stone-wall_mini.jpg");
 		walls.add(new DefaultMutableTreeNode(resWall));
 		}catch(IOException e)
 		{
@@ -186,7 +186,7 @@ public class MainWindow extends JFrame{
 		}
 		
 		
-		for (Map.Entry<Long, MovableResource> entry : resMan.getObjectMap().entrySet())
+		for (Map.Entry<Integer, MovableResource> entry : resMan.getObjectMap().entrySet())
 		{
 			DefaultMutableTreeNode textNode =  new DefaultMutableTreeNode(entry.getValue());
 			objects.add(textNode);
@@ -447,7 +447,7 @@ public class MainWindow extends JFrame{
 					if(m_battleView != null)
 					{
 						try{
-							m_network.sendRawMessage(m_battleView.getBattlefieldModel().toString());
+							m_network.sendRawMessage("[A0]"+m_battleView.getBattlefieldModel().toString());
 						}catch (IOException e)
 						{
 							JOptionPane.showMessageDialog(null, "Erreur d'E/S!\n"+e.toString(), "IOException", JOptionPane.ERROR_MESSAGE);

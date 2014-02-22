@@ -18,7 +18,7 @@ public class Battlefield implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
-	public Battlefield(int width, int height, long tileId)
+	public Battlefield(int width, int height, int tileId)
 	{
 		m_width = width;
 		m_height = height;

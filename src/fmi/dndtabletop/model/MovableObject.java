@@ -19,12 +19,12 @@ public class MovableObject implements Serializable{
 	private int m_x;
 	private int m_y;
 	private JLabel m_view;
-	private long m_resourceId;
+	private int m_resourceId;
 	private double m_rotate;
 	private JLayer<BattleView> m_layerUI;
 	private boolean m_selected;
 	
-	public MovableObject(int x, int y, double rotate, long resourceId, JLayer<BattleView> layer)
+	public MovableObject(int x, int y, double rotate, int resourceId, JLayer<BattleView> layer)
 	{
 		m_x = x;
 		m_y = y;

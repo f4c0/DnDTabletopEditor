@@ -18,17 +18,17 @@ public class ResourceManager {
 	private static ResourceManager m_singleton;
 
 	private String ResTextureTileBaseFolder;
-	private HashMap<Long, TileResource> m_textTileMap;
+	private HashMap<Integer, TileResource> m_textTileMap;
 	
 	private String ResObjectsBaseFolder;
-	private HashMap<Long, MovableResource> m_objectsMap;
+	private HashMap<Integer, MovableResource> m_objectsMap;
 	
 
 
 	private ResourceManager()
 	{
-		m_textTileMap = new HashMap<Long, TileResource>();
-		m_objectsMap = new HashMap<Long, MovableResource>();
+		m_textTileMap = new HashMap<Integer, TileResource>();
+		m_objectsMap = new HashMap<Integer, MovableResource>();
 		try {
 			
 			InputStream is = getClass().getResourceAsStream(RESOURCES_FILE);
@@ -52,6 +52,7 @@ public class ResourceManager {
 					Element eElement = (Element) nNode;
 					ResTextureTileBaseFolder = ((Element)(eElement.getParentNode())).getAttribute("dir");
 					String name = eElement.getAttribute("name");
+					int id = Integer.valueOf(eElement.getAttribute("id"));
 					String fileName = eElement.getAttribute("file");
 					String animatedFlag = eElement.getAttribute("animated");
 					
@@ -63,7 +64,7 @@ public class ResourceManager {
 						}
 					}
 
-					TileResource tile = new TileResource(name, ResTextureTileBaseFolder, fileName);
+					TileResource tile = new TileResource(name, id, ResTextureTileBaseFolder, fileName);
 					m_textTileMap.put(tile.getId(), tile);
 				}
 			}
@@ -79,6 +80,7 @@ public class ResourceManager {
 					Element eElement = (Element) nNode;
 					ResObjectsBaseFolder = ((Element)(eElement.getParentNode())).getAttribute("dir");
 					String name = eElement.getAttribute("name");
+					int id = Integer.valueOf(eElement.getAttribute("id"));
 					String fileName = eElement.getAttribute("file");
 					String animatedFlag = eElement.getAttribute("animated");
 					
@@ -90,7 +92,7 @@ public class ResourceManager {
 						}
 					}
 
-					MovableResource tile = new MovableResource(name, ResObjectsBaseFolder, fileName);
+					MovableResource tile = new MovableResource(name, id, ResObjectsBaseFolder, fileName);
 					m_objectsMap.put(tile.getId(), tile);
 				}
 			}
@@ -111,7 +113,7 @@ public class ResourceManager {
 		return m_singleton;
 	}
 	
-	public Resource getTextureTile(long id)
+	public Resource getTextureTile(int id)
 	{
 		TileResource res = m_textTileMap.get(id);
 		if(res == null)
@@ -122,7 +124,7 @@ public class ResourceManager {
 		return res;
 	}
 	
-	public MovableResource getObject(long id)
+	public MovableResource getObject(int id)
 	{
 		MovableResource res = m_objectsMap.get(id);
 		if(res == null)
@@ -133,12 +135,12 @@ public class ResourceManager {
 		return res;
 	}
 	
-	public HashMap<Long, TileResource> getTextureTileMap()
+	public HashMap<Integer, TileResource> getTextureTileMap()
 	{
 		return m_textTileMap;
 	}
 	
-	public HashMap<Long, MovableResource> getObjectMap()
+	public HashMap<Integer, MovableResource> getObjectMap()
 	{
 		return m_objectsMap;
 	}
