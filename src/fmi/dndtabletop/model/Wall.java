@@ -30,7 +30,7 @@ public class Wall implements Serializable{
 		
 		for(Point p : m_pointList)
 		{
-			xmlFlow.append("<Point x=\""+p.x+"\" y=\""+p.y+"\" />");
+			xmlFlow.append("<Point x=\""+(p.x*1.5/Tile.DEFAULT_WIDTH)+"\" y=\""+(p.y*1.5/Tile.DEFAULT_HEIGHT)+"\" />");
 		}
 		
 		xmlFlow.append("</Wall>");

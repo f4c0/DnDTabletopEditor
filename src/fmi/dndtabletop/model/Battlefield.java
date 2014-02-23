@@ -10,8 +10,8 @@ public class Battlefield implements Serializable{
 	private Tile m_tiles[][];
 	private ArrayList<MovableObject> m_objectsList;
 	private ArrayList<Wall> m_walls;
-
-	private static final long serialVersionUID = 1L;
+	
+	private int m_incrementalRefId;
 	
 	public Battlefield(int width, int height, int tileId)
 	{
@@ -33,6 +33,8 @@ public class Battlefield implements Serializable{
 		
 		m_objectsList = new ArrayList<MovableObject>();
 		m_walls = new ArrayList<Wall>();
+		
+		m_incrementalRefId = 0;
 	}
 
 	public int getWidth() {
@@ -56,7 +58,9 @@ public class Battlefield implements Serializable{
 	
 	public void addObject(MovableObject object)
 	{
-		m_objectsList.add(object);
+		object.setRefId(m_incrementalRefId);
+		m_incrementalRefId ++;
+		m_objectsList.add(object);		
 	}
 	
 	public ArrayList<MovableObject> getObjectsList()

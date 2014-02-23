@@ -246,6 +246,7 @@ public class MainWindow extends JFrame{
 				if(m_battleView != null)
 				{
 					m_battleView.rotateSelectedObject(45);
+					m_jlayer.repaint();
 				}
 				
 			}
@@ -259,6 +260,7 @@ public class MainWindow extends JFrame{
 				if(m_battleView != null)
 				{
 					m_battleView.rotateSelectedObject(-45);
+					m_jlayer.repaint();
 				}
 				
 			}

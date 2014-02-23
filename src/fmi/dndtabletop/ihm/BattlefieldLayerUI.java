@@ -48,23 +48,26 @@ public class BattlefieldLayerUI  extends LayerUI<BattleView>{
 		ArrayList<MovableObject> list = bfv.getObjectsList();
 		for(MovableObject obj : list)
 		{
-			AffineTransform saveXform = g2d.getTransform();
-			
+			// Push matrix
+			AffineTransform saveXform = g2d.getTransform();			
 			ImageIcon icon = (ImageIcon)obj.getView().getIcon();
-			g2d.translate(obj.getX(), obj.getY());
+			
+			int xCenter = icon.getIconWidth()/2;
+			int yCenter = icon.getIconHeight()/2;
+			g2d.translate(obj.getX()+xCenter, obj.getY()+yCenter);
 			g2d.rotate(obj.getRotation());
-			g2d.drawImage(icon.getImage(), 0, 0, c);
+			g2d.drawImage(icon.getImage(), -xCenter, -yCenter, c);			
 			
 			if(obj.isSelected())
 			{
 				g2d.setColor(Color.red);
-				g2d.drawRect(0, 0, icon.getIconWidth(), icon.getIconHeight());
+				g2d.drawRect(-xCenter, -yCenter, icon.getIconWidth(), icon.getIconHeight());
 			}else
 			{
 				g2d.setColor(Color.black);
 			}
 			
-			
+			// Pop matrix
 			g2d.setTransform(saveXform);
 		}
 
@@ -101,9 +104,6 @@ public class BattlefieldLayerUI  extends LayerUI<BattleView>{
 				}
 				
 				g2d.draw(wallShape);
-				
-//				g2d.drawLine(walls.get(i).getV1().x, walls.get(i).getV1().y, 
-//						walls.get(i).getV2().x,walls.get(i).getV2().y );
 			}		
 		}
 		

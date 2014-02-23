@@ -16,15 +16,17 @@ public class MovableObject implements Serializable{
 	private int m_y;
 	private JLabel m_view;
 	private int m_resourceId;
-	private double m_rotate;
+	private int m_refId;
+	private float m_rotate;
 	private boolean m_selected;
 	
-	public MovableObject(int x, int y, double rotate, int resourceId)
+	public MovableObject(int x, int y, float rotate, int resourceId)
 	{
 		m_x = x;
 		m_y = y;
 		m_rotate = rotate;
 		m_resourceId = resourceId;
+		m_refId = 0;
 		
 		ImageIcon img = ResourceManager.getInstance().getObject(m_resourceId).getImage();
 		m_view = new JLabel(img);
@@ -105,10 +107,27 @@ public class MovableObject implements Serializable{
 		m_rotate += value;
 	}
 	
+	public void setRefId(int value)
+	{
+		m_refId = value;
+	}
+	
 	public String toString()
 	{
 		StringBuffer xmlFlow = new StringBuffer();
-		xmlFlow.append("<MovableObject x=\""+m_x+"\" y=\""+m_y+"\" id=\""+m_resourceId+"\" />");
+		Rectangle bounds = m_view.getBounds();
+		
+		float x = (m_x * 1.0f + bounds.width / 2.0f) * 1.5f / Tile.DEFAULT_WIDTH;
+		float y = (m_y * 1.0f + bounds.height / 2.0f) * 1.5f / Tile.DEFAULT_HEIGHT;		
+		
+		xmlFlow.append("<MovableObject ");
+		xmlFlow.append("x=\""+x+"\" ");
+		xmlFlow.append("y=\""+y+"\" ");
+		xmlFlow.append("rotationInDeg=\""+m_rotate+"\" ");
+		xmlFlow.append("resourceId=\""+m_resourceId+"\" ");
+		xmlFlow.append("refId=\""+m_refId+"\" ");
+		xmlFlow.append("/>");		
+		
 		return xmlFlow.toString();
 	}
 }
