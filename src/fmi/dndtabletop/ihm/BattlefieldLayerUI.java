@@ -87,7 +87,7 @@ public class BattlefieldLayerUI  extends LayerUI<BattleView>{
 			bGr.drawImage(img, 0, 0, null);
 			bGr.dispose();
 
-			g2d.setStroke(new BasicStroke(8.0F));
+			g2d.setStroke(new BasicStroke(20.0F));
 			for(int i = 0; i < walls.size(); i++)				
 			{
 				Path2D.Float wallShape = new Path2D.Float();
@@ -109,13 +109,13 @@ public class BattlefieldLayerUI  extends LayerUI<BattleView>{
 		
 		if(bfv.getDrawingMode() == DrawingMode.LINE)
 		{
-			g2d.setStroke(new BasicStroke(3.0F));
+			g2d.setStroke(new BasicStroke(20.0F));
 			g2d.setColor(Color.blue);
 			g2d.drawLine(bfv.getP1().x, bfv.getP1().y, 
 					bfv.getP2().x, bfv.getP2().y );
 		}else if(bfv.getDrawingMode() == DrawingMode.RECT)
 		{
-			g2d.setStroke(new BasicStroke(3.0F));
+			g2d.setStroke(new BasicStroke(20.0F));
 			g2d.setColor(Color.blue);
 			g2d.drawRect(Math.min(bfv.getP1().x, bfv.getP2().x), Math.min(bfv.getP1().y, bfv.getP2().y), 
 					Math.abs(bfv.getP2().x - bfv.getP1().x), Math.abs(bfv.getP2().y - bfv.getP1().y));

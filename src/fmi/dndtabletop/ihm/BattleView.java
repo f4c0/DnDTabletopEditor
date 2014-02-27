@@ -11,6 +11,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.JLayer;
@@ -23,6 +24,8 @@ import fmi.dndtabletop.model.Battlefield;
 import fmi.dndtabletop.model.MovableObject;
 import fmi.dndtabletop.model.Tile;
 import fmi.dndtabletop.model.Wall;
+import fmi.dndtabletop.network.MessageHandler;
+import fmi.dndtabletop.network.MessageHandler.Direction;
 import fmi.dndtabletop.resources.ResourceManager;
 import fmi.dndtabletop.resources.TileResource;
 
@@ -30,12 +33,14 @@ public class BattleView extends JPanel implements MouseListener, MouseMotionList
 
 	private Battlefield m_bf;
 	private DrawingMode m_drawingModeActivated;
-	
+
 	private Point m_point1;
 	private Point m_point2;
-	
+
 	private JLayer<BattleView> m_layerUI;
-	
+
+	private boolean m_inGameMode;
+
 	enum DrawingMode
 	{
 		NONE,
@@ -43,7 +48,7 @@ public class BattleView extends JPanel implements MouseListener, MouseMotionList
 		RECT
 	};
 
-	public BattleView(int width, int height, int tileId, JLayer<BattleView> layer)
+	public BattleView(int width, int height, int tileId, JLayer<BattleView> layer, boolean inGameMode)
 	{
 		super();
 		this.m_layerUI = layer;
@@ -52,6 +57,7 @@ public class BattleView extends JPanel implements MouseListener, MouseMotionList
 		this.setLayout(new GridLayout(this.m_bf.getHeight(), this.m_bf.getWidth()));
 		m_point1 = null;
 		m_point2 = new Point();
+		m_inGameMode = inGameMode;
 
 		for(int y = 0; y < this.m_bf.getHeight(); y++)
 		{
@@ -87,12 +93,12 @@ public class BattleView extends JPanel implements MouseListener, MouseMotionList
 
 		this.addMouseListener(this);
 		this.addMouseMotionListener(this);
-		this.addKeyListener(this);
+		this.addKeyListener(this);		
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent mouseEvt) {
-		
+
 		requestFocusInWindow();
 
 		JTree palette = ((MainWindow)SwingUtilities.getRoot(this)).getPaletteTree();
@@ -102,11 +108,11 @@ public class BattleView extends JPanel implements MouseListener, MouseMotionList
 		{
 			if(node.isLeaf())
 			{
-				
+
 				if(node.getParent().toString().equals(MainWindow.TREE_NODE_NAME_GND))
 				{
 					m_point1 = null;
-					
+
 					int cellX = mouseEvt.getX() / this.getComponent(0).getWidth();
 					int cellY = mouseEvt.getY() / this.getComponent(0).getHeight();
 					Tile t = this.m_bf.getTile(cellX, cellY);
@@ -144,10 +150,6 @@ public class BattleView extends JPanel implements MouseListener, MouseMotionList
 						w.addPoint(new Point(m_point1.x, mouseEvt.getY()));
 						w.addPoint(m_point1);
 						this.m_bf.addWall(w);
-//						this.m_bf.addWall(new Wall(m_point1, new Point(mouseEvt.getX(), m_point1.y)));
-//						this.m_bf.addWall(new Wall(new Point(mouseEvt.getX(), m_point1.y), new Point(mouseEvt.getX(), mouseEvt.getY())));
-//						this.m_bf.addWall(new Wall(new Point(mouseEvt.getX(), mouseEvt.getY()), new Point(m_point1.x, mouseEvt.getY())));
-//						this.m_bf.addWall(new Wall(new Point(m_point1.x, mouseEvt.getY()), m_point1));
 						m_point1 = null;
 						m_drawingModeActivated = DrawingMode.NONE;
 					}
@@ -188,7 +190,7 @@ public class BattleView extends JPanel implements MouseListener, MouseMotionList
 
 	@Override
 	public void mousePressed(MouseEvent mouseEvt) {
-		
+
 
 	}
 
@@ -197,7 +199,7 @@ public class BattleView extends JPanel implements MouseListener, MouseMotionList
 		// TODO Auto-generated method stub
 		m_layerUI.repaint();
 	}
-	
+
 	@Override
 	public void mouseDragged(MouseEvent mouseEvt) {
 		JTree palette = ((MainWindow)SwingUtilities.getRoot(this)).getPaletteTree();
@@ -209,7 +211,7 @@ public class BattleView extends JPanel implements MouseListener, MouseMotionList
 			{				
 				if(node.getParent().toString().equals(MainWindow.TREE_NODE_NAME_OBJ))
 				{
-					
+
 					ArrayList<MovableObject> objList = m_bf.getObjectsList();
 					for(MovableObject obj : objList)
 					{
@@ -226,7 +228,7 @@ public class BattleView extends JPanel implements MouseListener, MouseMotionList
 			}
 
 		}	
-		
+
 	}
 
 	@Override
@@ -243,7 +245,7 @@ public class BattleView extends JPanel implements MouseListener, MouseMotionList
 	{
 		return this.m_bf.getObjectsList();
 	}
-	
+
 	public ArrayList<Wall> getWallsList()
 	{
 		return this.m_bf.getWallsList();
@@ -272,27 +274,27 @@ public class BattleView extends JPanel implements MouseListener, MouseMotionList
 	public Dimension getPreferredSize() {
 		return super.getPreferredSize();
 	}
-	
+
 	public DrawingMode getDrawingMode()
 	{
 		return m_drawingModeActivated;
 	}
-	
+
 	public Point getP1()
 	{
 		return m_point1;
 	}
-	
+
 	public Point getP2()
 	{
 		return m_point2;
 	}
-	
+
 	public void rotateSelectedObject(double value)
 	{
 		m_bf.rotateSelectedObject(value);
 	}
-	
+
 	public Battlefield getBattlefieldModel()
 	{
 		return m_bf;
@@ -300,29 +302,49 @@ public class BattleView extends JPanel implements MouseListener, MouseMotionList
 
 	@Override
 	public void keyPressed(KeyEvent kEvent) {
-		switch(kEvent.getKeyCode())
-		{
-		case KeyEvent.VK_ESCAPE:
-			m_drawingModeActivated = DrawingMode.NONE;
-			m_point1 = null;
-			m_layerUI.repaint();
-			break;
+		try{
+			switch(kEvent.getKeyCode())
+			{
+			case KeyEvent.VK_ESCAPE:
+				m_drawingModeActivated = DrawingMode.NONE;
+				m_point1 = null;
+				m_layerUI.repaint();
+				break;
+			case KeyEvent.VK_Z:
+				MessageHandler.getInstance().sendCmd_moveCam(Direction.UP, 3);
+				break;
+			case KeyEvent.VK_S:
+				MessageHandler.getInstance().sendCmd_moveCam(Direction.DOWN, 3);
+				break;
+			case KeyEvent.VK_Q:
+				MessageHandler.getInstance().sendCmd_moveCam(Direction.LEFT, 3);
+				break;
+			case KeyEvent.VK_D:
+				MessageHandler.getInstance().sendCmd_moveCam(Direction.RIGHT, 3);
+				break;
 			default:
 				break;
+			}
+		}catch(IOException e)
+		{
+			e.printStackTrace();
+		}catch(Exception e)
+		{
+			e.printStackTrace();
 		}
-		
+
 	}
 
 	@Override
 	public void keyReleased(KeyEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void keyTyped(KeyEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 

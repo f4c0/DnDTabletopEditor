@@ -97,7 +97,7 @@ public class CreateBattlefieldDialog extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {				
 		
-				m_bf = new BattleView(Integer.valueOf(txtWidth.getText()), Integer.valueOf(txtHeight.getText()), ((Resource)tileList.getSelectedValue()).getId(), m_mainWin.getBattleViewUI());				
+				m_bf = new BattleView(Integer.valueOf(txtWidth.getText()), Integer.valueOf(txtHeight.getText()), ((Resource)tileList.getSelectedValue()).getId(), m_mainWin.getBattleViewUI(), m_mainWin.getInGameMode());				
 				setVisible(false);
 			}
 		});

@@ -50,24 +50,29 @@ public class MainWindow extends JFrame{
 	private MetricRule m_ColRule;
 	private MetricRule m_RowRule;
 	private JTree m_tree;
-	
+
 	public static final String TREE_NODE_NAME_WALL = "Murs";
 	public static final String TREE_NODE_NAME_ROOM = "Salles";
 	public static final String TREE_NODE_NAME_GND = "Sols";
 	public static final String TREE_NODE_NAME_OBJ = "Objets";			
 
 	private static final String APP_NAME = "DnD Tabletop Editor";
-	private MessageHandler m_network;
 
 	private static final String EXT_FILE = "btf";
 	private JLayer<BattleView> m_jlayer;
 
+	private JMenuItem m_menuItemEditorMode;
+	private JMenuItem m_menuItemInGameMode;
+	private boolean m_inGameMode;
+
+	private JPanel m_treePanel;
+
 	public MainWindow()
 	{
-		super(APP_NAME);		
-		m_network = null;
+		super(APP_NAME);
+		m_inGameMode = false;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
+
 		JPanel contentPanel = (JPanel)this.getContentPane();
 
 		createMenu();		
@@ -78,11 +83,11 @@ public class MainWindow extends JFrame{
 		JComponent cpanel = new JPanel();		
 		cpanel.setLayout(new GridLayout(1,1));	
 		//m_battleView = new BattleView(1,1,0);
-		
-		
+
+
 		LayerUI<BattleView> layerUI = new BattlefieldLayerUI();
 		m_jlayer = new JLayer<BattleView>(m_battleView, layerUI);
-		
+
 		m_centerSc = new JScrollPane(m_jlayer);
 		m_ColRule = new MetricRule(MetricRule.HORIZONTAL, false, null);
 		m_RowRule = new MetricRule(MetricRule.VERTICAL, false, null);
@@ -95,18 +100,18 @@ public class MainWindow extends JFrame{
 		m_centerSc.setVisible(false);
 
 		m_tree = createTree();
-		
-		
-		JPanel leftPan = new JPanel();
-		leftPan.setLayout(new BorderLayout());
-		leftPan.add(m_tree, BorderLayout.CENTER);	
-		
-		JPanel panButs = createOrientationButtonsPan();
-		
-		leftPan.add(panButs, BorderLayout.SOUTH);
-		
 
-		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPan, cpanel);
+
+		m_treePanel = new JPanel();
+		m_treePanel.setLayout(new BorderLayout());
+		m_treePanel.add(m_tree, BorderLayout.CENTER);	
+
+		JPanel panButs = createOrientationButtonsPan();
+
+		m_treePanel.add(panButs, BorderLayout.SOUTH);
+
+
+		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, m_treePanel, cpanel);
 		splitPane.setOneTouchExpandable(true);
 		splitPane.setDividerLocation(150);
 
@@ -130,7 +135,7 @@ public class MainWindow extends JFrame{
 		menuFichier.add(menuItemOuvrir);
 		menuFichier.add(menuItemEnregistre);
 		menuFichier.addSeparator();
-		menuFichier.add(menuItemQuitter);
+		menuFichier.add(menuItemQuitter);		
 
 		JMenu menuNetwork = new JMenu("R\u00E9seau");
 		JMenuItem menuItemConnection = new JMenuItem("Connexion au renderer distant");
@@ -143,12 +148,22 @@ public class MainWindow extends JFrame{
 		menuNetwork.add(menuItemPush);
 		menuNetwork.add(menuItemSendRawMessage);
 
+		JMenu menuControle = new JMenu("Mode");
+		m_menuItemEditorMode = new JMenuItem("Mode Editeur");
+		m_menuItemEditorMode.setEnabled(false);
+		m_menuItemEditorMode.addActionListener(new ModeMenuListener());
+		m_menuItemInGameMode = new JMenuItem("Mode In Game");
+		m_menuItemInGameMode.addActionListener(new ModeMenuListener());
+		menuControle.add(m_menuItemEditorMode);
+		menuControle.add(m_menuItemInGameMode);		
+
 		JMenu menuInfo = new JMenu("?");
 		JMenuItem menuItemApropos = new JMenuItem("A propos de "+APP_NAME);
 		menuInfo.add(menuItemApropos);
 
 		menuBar.add(menuFichier);
 		menuBar.add(menuNetwork);
+		menuBar.add(menuControle);
 		menuBar.add(menuInfo);
 
 		this.setJMenuBar(menuBar);
@@ -175,19 +190,19 @@ public class MainWindow extends JFrame{
 			DefaultMutableTreeNode textNode =  new DefaultMutableTreeNode(entry.getValue());
 			grounds.add(textNode);
 		}
-		
+
 		//tests !
 		DrawnResource resWall;
 		try{
-		resWall = new DrawnResource("Mur simple", 0, "/fmi/dndtabletop/resources/objects/", "free-stone-wall_mini.jpg");
-		rooms.add(new DefaultMutableTreeNode(resWall));
-		walls.add(new DefaultMutableTreeNode(resWall));
+			resWall = new DrawnResource("Mur simple", 0, "/fmi/dndtabletop/resources/objects/", "free-stone-wall_mini.jpg");
+			rooms.add(new DefaultMutableTreeNode(resWall));
+			walls.add(new DefaultMutableTreeNode(resWall));
 		}catch(IOException e)
 		{
 			e.printStackTrace();
 		}
-		
-		
+
+
 		for (Map.Entry<Integer, MovableResource> entry : resMan.getObjectMap().entrySet())
 		{
 			DefaultMutableTreeNode textNode =  new DefaultMutableTreeNode(entry.getValue());
@@ -229,17 +244,17 @@ public class MainWindow extends JFrame{
 
 		return tree;
 	}
-	
+
 	private JPanel createOrientationButtonsPan()
 	{
 		JPanel panButs = new JPanel();
 		panButs.setLayout(new GridLayout(1, 2));
-		
+
 		JButton butCW = new JButton("CW");
 		JButton butCCW = new JButton("CCW");
-		
+
 		butCW.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO Auto-generated method stub
@@ -248,12 +263,12 @@ public class MainWindow extends JFrame{
 					m_battleView.rotateSelectedObject(45);
 					m_jlayer.repaint();
 				}
-				
+
 			}
 		});
-		
+
 		butCCW.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO Auto-generated method stub
@@ -262,24 +277,29 @@ public class MainWindow extends JFrame{
 					m_battleView.rotateSelectedObject(-45);
 					m_jlayer.repaint();
 				}
-				
+
 			}
 		});
-		
+
 		panButs.add(butCW);
 		panButs.add(butCCW);
-		
+
 		return panButs;
 	}
-	
+
 	public JTree getPaletteTree()
 	{
 		return m_tree;
 	}
-	
+
 	public JLayer<BattleView> getBattleViewUI()
 	{
 		return m_jlayer;
+	}
+
+	public boolean getInGameMode()
+	{
+		return m_inGameMode;
 	}
 
 	public class FileMenuListener implements ActionListener{
@@ -294,7 +314,7 @@ public class MainWindow extends JFrame{
 					m_battleView = bvTemp;
 					m_jlayer.setView(m_battleView);
 					m_centerSc.setViewportView(m_jlayer);
-					
+
 					m_ColRule.resize(m_battleView);
 					m_RowRule.resize(m_battleView);
 
@@ -312,13 +332,13 @@ public class MainWindow extends JFrame{
 				chooser.setFileFilter(filter);
 				int returnVal = chooser.showOpenDialog(MainWindow.this);
 				if(returnVal == JFileChooser.APPROVE_OPTION) {
-					
+
 					String absFileName = chooser.getSelectedFile().getAbsolutePath();
 					if(!(absFileName.contains(EXT_FILE)))
 					{
 						absFileName = absFileName + "." + EXT_FILE;
 					}
-					
+
 					System.out.println("You chose to open this file: " +
 							absFileName);
 
@@ -329,7 +349,7 @@ public class MainWindow extends JFrame{
 						m_battleView = (BattleView) ois.readObject();
 						m_jlayer.setView(m_battleView);
 						m_centerSc.setViewportView(m_jlayer);
-						
+
 						m_ColRule.resize(m_battleView);
 						m_RowRule.resize(m_battleView);
 
@@ -369,7 +389,7 @@ public class MainWindow extends JFrame{
 
 					System.out.println("You chose to save this file: " +
 							absFileName);
-					
+
 					System.out.println(m_battleView.getBattlefieldModel());
 
 					try {
@@ -389,16 +409,14 @@ public class MainWindow extends JFrame{
 			}			
 			else if(sourceText.equals("Quitter"))
 			{
-				if(m_network != null)
+
+				try{
+					MessageHandler.getInstance().close();
+				}catch(IOException e)
 				{
-					try{
-						m_network.close();
-					}catch(IOException e)
-					{
-						e.printStackTrace();
-					}
-					
+					e.printStackTrace();
 				}
+
 				System.exit(0);
 			}
 		}    
@@ -410,7 +428,7 @@ public class MainWindow extends JFrame{
 			String sourceText = ((JMenuItem)arg0.getSource()).getText();
 			if(sourceText.equals("Connexion au renderer distant"))
 			{
-				String serveur = JOptionPane.showInputDialog(null, "Entrez l'adresse du serveur IP:PORT (localhost:33333)", "Connexion au renderer distant", JOptionPane.QUESTION_MESSAGE);
+				String serveur = JOptionPane.showInputDialog("Entrez l'adresse du serveur IP:PORT", "localhost:33333");
 				if(serveur != null)
 				{
 					StringTokenizer st = new StringTokenizer(serveur, ":");
@@ -420,13 +438,8 @@ public class MainWindow extends JFrame{
 						{
 							String host = st.nextToken();
 							int port = Integer.parseInt(st.nextToken());
-							if(m_network == null)
-							{
-								m_network = new MessageHandler(host, port);
-							}else
-							{
-								m_network.reconfigure(host, port);
-							}
+							MessageHandler.getInstance().reconfigure(host, port);
+
 						}catch(UnknownHostException e)
 						{
 							JOptionPane.showMessageDialog(null, "Host inconnu!\n"+e.toString(), "UnknownHostException", JOptionPane.ERROR_MESSAGE);
@@ -445,47 +458,66 @@ public class MainWindow extends JFrame{
 
 				}
 			}else if(sourceText.equals("Push"))
-			{				
-				if(m_network != null)
+			{	
+				if(m_battleView != null)
 				{
-					if(m_battleView != null)
+					try{
+						MessageHandler.getInstance().sendCmd_TransfertBattlefield(m_battleView.getBattlefieldModel().toString());
+					}catch (IOException e)
 					{
-						try{
-							m_network.sendRawMessage("[A0]"+m_battleView.getBattlefieldModel().toString());
-						}catch (IOException e)
-						{
-							JOptionPane.showMessageDialog(null, "Erreur d'E/S!\n"+e.toString(), "IOException", JOptionPane.ERROR_MESSAGE);
-						}	
-					}else
+						JOptionPane.showMessageDialog(null, "Erreur d'E/S!\n"+e.toString(), "IOException", JOptionPane.ERROR_MESSAGE);
+					}catch(Exception e)
 					{
-						JOptionPane.showMessageDialog(null, "Battlefield vide", "Gnnn ??", JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(null, "Connecte toi d'abord ! "+e.toString(), "Erreur de connexion", JOptionPane.ERROR_MESSAGE);
 					}
 				}else
 				{
-					JOptionPane.showMessageDialog(null, "Connecte toi d'abord !", "Erreur de connexion", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Battlefield vide", "Gnnn ??", JOptionPane.ERROR_MESSAGE);
 				}
+
 			}else if(sourceText.equals("Send raw datagram"))
 			{
-				if(m_network != null)
-				{
-					String message = JOptionPane.showInputDialog(null, "Message", "Send raw datagram", JOptionPane.QUESTION_MESSAGE);
-					if(message != null)
-					{
-						try{
-							m_network.sendRawMessage(message);
-						}catch (IOException e)
-						{
-							JOptionPane.showMessageDialog(null, "Erreur d'E/S!\n"+e.toString(), "IOException", JOptionPane.ERROR_MESSAGE);
-						}	    				
-					}
 
-				}else
+				String message = JOptionPane.showInputDialog(null, "Message", "Send raw datagram", JOptionPane.QUESTION_MESSAGE);
+				if(message != null)
 				{
-					JOptionPane.showMessageDialog(null, "Connecte toi d'abord !", "Erreur de connexion", JOptionPane.ERROR_MESSAGE);
+					try{
+						MessageHandler.getInstance().sendRawMessage(message);
+					}catch (IOException e)
+					{
+						JOptionPane.showMessageDialog(null, "Erreur d'E/S!\n"+e.toString(), "IOException", JOptionPane.ERROR_MESSAGE);
+					}catch(Exception e)
+					{
+						JOptionPane.showMessageDialog(null, "Connecte toi d'abord ! "+e.toString(), "Erreur de connexion", JOptionPane.ERROR_MESSAGE);
+					}   				
 				}
+
+			}
+		}
+	}
+
+	public class ModeMenuListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			String sourceText = ((JMenuItem)arg0.getSource()).getText();			
+
+			if(sourceText.equals("Mode Editeur"))
+			{
+				m_menuItemEditorMode.setEnabled(false);
+				m_menuItemInGameMode.setEnabled(true);
+				m_treePanel.setVisible(true);
+				m_inGameMode = false;
+			}else if(sourceText.equals("Mode In Game"))
+			{
+				m_menuItemEditorMode.setEnabled(true);
+				m_menuItemInGameMode.setEnabled(false);
+				m_treePanel.setVisible(false);
+				m_inGameMode = true;
 			}
 
-		}    
+		}
+
 	}
 
 	public class InfoMenuListener implements ActionListener{
@@ -500,23 +532,23 @@ public class MainWindow extends JFrame{
 	 * event-dispatching thread.
 	 */
 	private static void createAndShowGUI() {
-//		try {
-//			// Set System L&F
-//			UIManager.setLookAndFeel(
-//					UIManager.getSystemLookAndFeelClassName());
-//		} 
-//		catch (UnsupportedLookAndFeelException e) {
-//			// handle exception
-//		}
-//		catch (ClassNotFoundException e) {
-//			// handle exception
-//		}
-//		catch (InstantiationException e) {
-//			// handle exception
-//		}
-//		catch (IllegalAccessException e) {
-//			// handle exception
-//		}
+		//		try {
+		//			// Set System L&F
+		//			UIManager.setLookAndFeel(
+		//					UIManager.getSystemLookAndFeelClassName());
+		//		} 
+		//		catch (UnsupportedLookAndFeelException e) {
+		//			// handle exception
+		//		}
+		//		catch (ClassNotFoundException e) {
+		//			// handle exception
+		//		}
+		//		catch (InstantiationException e) {
+		//			// handle exception
+		//		}
+		//		catch (IllegalAccessException e) {
+		//			// handle exception
+		//		}
 
 		MainWindow mainWin = new MainWindow();
 		mainWin.pack();
