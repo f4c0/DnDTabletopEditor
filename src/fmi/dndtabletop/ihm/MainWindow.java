@@ -193,9 +193,12 @@ public class MainWindow extends JFrame{
 
 		//tests !
 		DrawnResource resWall;
+		DrawnResource resDoor;
 		try{
 			resWall = new DrawnResource("Mur simple", 0, "/fmi/dndtabletop/resources/objects/", "free-stone-wall_mini.jpg");
+			resDoor = new DrawnResource("Porte simple", 0, "/fmi/dndtabletop/resources/objects/", "door.png");
 			rooms.add(new DefaultMutableTreeNode(resWall));
+			rooms.add(new DefaultMutableTreeNode(resDoor));
 			walls.add(new DefaultMutableTreeNode(resWall));
 		}catch(IOException e)
 		{

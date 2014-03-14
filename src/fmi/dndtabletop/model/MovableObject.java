@@ -3,11 +3,10 @@ package fmi.dndtabletop.model;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.io.Serializable;
+
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import javax.swing.JLayer;
 
-import fmi.dndtabletop.ihm.BattleView;
 import fmi.dndtabletop.resources.ResourceManager;
 
 public class MovableObject implements Serializable{

@@ -24,6 +24,8 @@ import fmi.dndtabletop.model.MovableObject;
 import fmi.dndtabletop.model.Wall;
 
 public class BattlefieldLayerUI  extends LayerUI<BattleView>{
+	
+	public static final float WALL_STROKE = 20.0f;
 
 	@Override
 	public void paint (Graphics g, JComponent c) {
@@ -71,51 +73,24 @@ public class BattlefieldLayerUI  extends LayerUI<BattleView>{
 			g2d.setTransform(saveXform);
 		}
 
-		g2d.setColor(Color.black);
-		ArrayList<Wall> walls = bfv.getWallsList();
-		if(walls.size() > 0)
+		//g2d.setColor(Color.black);
+		
+		ArrayList<Wall> walls = bfv.getWallsList();		
+		for(Wall w : walls)
 		{
-			//draw wall painter
-			URL imgURL = getClass().getResource("/fmi/dndtabletop/resources/objects/free-stone-wall_mini.jpg");
-
-			Image img = Toolkit.getDefaultToolkit().getImage(imgURL);
-
-			// Create a buffered image with transparency
-			BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
-			// Draw the image on to the buffered image
-			Graphics2D bGr = bimage.createGraphics();
-			bGr.drawImage(img, 0, 0, null);
-			bGr.dispose();
-
-			g2d.setStroke(new BasicStroke(20.0F));
-			for(int i = 0; i < walls.size(); i++)				
-			{
-				Path2D.Float wallShape = new Path2D.Float();
-				ArrayList<Point> points = walls.get(i).getPoints();
-				for(int j = 0; j < points.size(); j++)
-				{
-					if(j == 0)
-					{
-						wallShape.moveTo(points.get(j).x, points.get(j).y);
-					}else
-					{
-						wallShape.lineTo(points.get(j).x, points.get(j).y);
-					}
-				}
-				
-				g2d.draw(wallShape);
-			}		
+			w.draw(g2d);
 		}
+
 		
 		if(bfv.getDrawingMode() == DrawingMode.LINE)
 		{
-			g2d.setStroke(new BasicStroke(20.0F));
+			g2d.setStroke(new BasicStroke(WALL_STROKE));
 			g2d.setColor(Color.blue);
 			g2d.drawLine(bfv.getP1().x, bfv.getP1().y, 
 					bfv.getP2().x, bfv.getP2().y );
 		}else if(bfv.getDrawingMode() == DrawingMode.RECT)
 		{
-			g2d.setStroke(new BasicStroke(20.0F));
+			g2d.setStroke(new BasicStroke(WALL_STROKE));
 			g2d.setColor(Color.blue);
 			g2d.drawRect(Math.min(bfv.getP1().x, bfv.getP2().x), Math.min(bfv.getP1().y, bfv.getP2().y), 
 					Math.abs(bfv.getP2().x - bfv.getP1().x), Math.abs(bfv.getP2().y - bfv.getP1().y));
