@@ -11,8 +11,7 @@ import fmi.dndtabletop.resources.ResourceManager;
 
 public class Tile  implements Serializable{
 	
-	public static final int DEFAULT_WIDTH = 40;
-	public static final int DEFAULT_HEIGHT = 40;
+	public static final int SIZE = 40;
 	
 	private JLabel m_view;
 	private int m_id;
@@ -23,9 +22,9 @@ public class Tile  implements Serializable{
 		ImageIcon img = ResourceManager.getInstance().getTextureTile(id).getImage();
 		
 		m_view = new JLabel(img);
-		m_view.setMinimumSize(new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT));
-		m_view.setMaximumSize(new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT));
-		m_view.setPreferredSize(new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT));
+		m_view.setMinimumSize(new Dimension(SIZE, SIZE));
+		m_view.setMaximumSize(new Dimension(SIZE, SIZE));
+		m_view.setPreferredSize(new Dimension(SIZE, SIZE));
 
 		m_id = id;
 	}

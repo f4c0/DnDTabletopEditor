@@ -4,14 +4,8 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.Toolkit;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Path2D;
-import java.awt.image.BufferedImage;
-import java.net.URL;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
@@ -21,11 +15,12 @@ import javax.swing.plaf.LayerUI;
 
 import fmi.dndtabletop.ihm.BattleView.DrawingMode;
 import fmi.dndtabletop.model.MovableObject;
+import fmi.dndtabletop.model.Tile;
 import fmi.dndtabletop.model.Wall;
 
 public class BattlefieldLayerUI  extends LayerUI<BattleView>{
 	
-	public static final float WALL_STROKE = 20.0f;
+	public static final float WALL_STROKE = Tile.SIZE * 0.5f;
 
 	@Override
 	public void paint (Graphics g, JComponent c) {

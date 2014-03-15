@@ -116,8 +116,8 @@ public class MovableObject implements Serializable{
 		StringBuffer xmlFlow = new StringBuffer();
 		Rectangle bounds = m_view.getBounds();
 		
-		float x = (m_x * 1.0f + bounds.width / 2.0f) * 1.5f / Tile.DEFAULT_WIDTH;
-		float y = (m_y * 1.0f + bounds.height / 2.0f) * 1.5f / Tile.DEFAULT_HEIGHT;		
+		float x = (m_x * 1.0f + bounds.width / 2.0f) * 1.5f / Tile.SIZE;
+		float y = (m_y * 1.0f + bounds.height / 2.0f) * 1.5f / Tile.SIZE;		
 		
 		xmlFlow.append("<MovableObject ");
 		xmlFlow.append("x=\""+x+"\" ");

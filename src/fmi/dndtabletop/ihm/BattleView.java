@@ -144,11 +144,13 @@ public class BattleView extends JPanel implements MouseListener, MouseMotionList
 					}else
 					{
 						Wall w = new Wall();
-						w.addPoint(m_point1);
-						w.addPoint(new Point(mouseEvt.getX(), m_point1.y));
-						w.addPoint(new Point(mouseEvt.getX(), mouseEvt.getY()));
-						w.addPoint(new Point(m_point1.x, mouseEvt.getY()));
-						w.addPoint(m_point1);
+						m_point2.setLocation(mouseEvt.getX(), mouseEvt.getY());
+						w.addPoint(new Point(m_point1));
+						w.addPoint(new Point(m_point2.x, m_point1.y));
+						w.addPoint(new Point(m_point2.x, m_point2.y));
+						w.addPoint(new Point(m_point1.x, m_point2.y));
+						w.addPoint(new Point(m_point1));
+						//System.out.println(w);
 						this.m_bf.addWall(w);
 						m_point1 = null;
 						m_drawingModeActivated = DrawingMode.NONE;
